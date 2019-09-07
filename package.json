@@ -1,0 +1,53 @@
+{
+  "name": "dida.js",
+  "version": "1.0.0",
+  "description": "An audio stream blender for the browser",
+  "main": "dist/dida.js",
+  "scripts": {
+    "dev": "npx cross-env NODE_ENV=development rollup -c -m -w",
+    "build": "npx cross-env NODE_ENV=production rollup -c",
+    "test": "npx eslint src"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zhw2590582/dida.js.git"
+  },
+  "keywords": [
+    "audio",
+    "stream",
+    "aac",
+    "mp3"
+  ],
+  "author": "Harvey Zack <laozhaochaguan@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zhw2590582/dida.js/issues"
+  },
+  "homepage": "https://github.com/zhw2590582/dida.js#readme",
+  "devDependencies": {
+    "@babel/core": "^7.6.0",
+    "@babel/plugin-external-helpers": "^7.2.0",
+    "@babel/plugin-transform-runtime": "^7.6.0",
+    "@babel/preset-env": "^7.6.0",
+    "@babel/runtime": "^7.6.0",
+    "babel-eslint": "^10.0.3",
+    "cross-env": "^5.2.1",
+    "eslint": "^6.3.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-config-prettier": "^6.2.0",
+    "eslint-plugin-import": "^2.18.2",
+    "rollup": "^1.20.3",
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-eslint": "^7.0.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-replace": "^2.2.0",
+    "rollup-plugin-uglify": "^6.0.3"
+  },
+  "engines": {
+    "node": "^9.0.0"
+  },
+  "dependencies": {
+    "option-validator": "^2.0.3"
+  }
+}
