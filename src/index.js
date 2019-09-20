@@ -130,6 +130,13 @@ export default class Dida {
     this.option.onVolumeChange(value);
   }
 
+  get duration() {
+    return this.audiobuffers.reduce((result, item) => {
+      result += item.duration;
+      return result;
+    }, 0);
+  }
+
   destroy() {
     this.stop();
     this.context = null;
