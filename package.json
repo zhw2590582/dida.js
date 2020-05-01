@@ -1,6 +1,6 @@
 {
   "name": "dida.js",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "An audio stream blender for the browser",
   "main": "dist/dida.js",
   "scripts": {
@@ -43,9 +43,6 @@
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-replace": "^2.2.0",
     "rollup-plugin-uglify": "^6.0.4"
-  },
-  "engines": {
-    "node": "^9.0.0"
   },
   "dependencies": {
     "option-validator": "^2.0.5"
