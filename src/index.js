@@ -56,6 +56,7 @@ export default class Dida {
     this.timestamps = [];
     this.audiobuffers = [];
     this.timestampTmp = [];
+    this.adjustNextTimestamp = 0;
     this.decodeErrorBuffer = new Uint8Array();
     this.decodeWaitingBuffer = new Uint8Array();
 
@@ -86,7 +87,7 @@ export default class Dida {
       autoEnd: true,
       autoEndTime: 5000,
       touchResume: true,
-      onNext: t => t,
+      onNext: (t) => t,
       onLoad: () => null,
       onStop: () => null,
       onPlay: () => null,
@@ -137,6 +138,10 @@ export default class Dida {
     }, 0);
   }
 
+  get currentTime() {
+    return this.adjustNextTimestamp;
+  }
+
   destroy() {
     this.stop();
     this.context = null;
@@ -163,14 +168,14 @@ export default class Dida {
       this.decodeWaitingBuffer = new Uint8Array();
       this.context.decodeAudioData(
         buffer,
-        audiobuffer => {
+        (audiobuffer) => {
           this.audioDuration += audiobuffer.duration;
           this.pcmLength += audiobuffer.length;
           this.audiobuffers.push(audiobuffer);
           this.decodeErrorBuffer = new Uint8Array();
           this.option.onDecodeDone(audiobuffer);
         },
-        error => {
+        (error) => {
           this.decodeErrorBuffer = mergeBuffer(this.decodeErrorBuffer, this.decodeWaitingBuffer);
           this.option.onDecodeError(error);
         },
@@ -192,7 +197,7 @@ export default class Dida {
       const { buffer } = this.decodeWaitingBuffer;
       this.decodeWaitingBuffer = new Uint8Array();
       this.decodeErrorBuffer = new Uint8Array();
-      this.context.decodeAudioData(buffer, audiobuffer => {
+      this.context.decodeAudioData(buffer, (audiobuffer) => {
         this.audioDuration += audiobuffer.duration;
         this.pcmLength += audiobuffer.length;
         this.audiobuffers.push(audiobuffer);
@@ -234,8 +239,8 @@ export default class Dida {
       const nextTimestamp = this.timestamps[index + 1];
       const nextAudiobuffer = this.audiobuffers[index + 1];
       if (nextTimestamp !== undefined && nextAudiobuffer !== undefined) {
-        const adjustNextTimestamp = this.option.onNext(nextTimestamp);
-        const adjustIndex = this.findIndex(adjustNextTimestamp);
+        this.adjustNextTimestamp = this.option.onNext(nextTimestamp);
+        const adjustIndex = this.findIndex(this.adjustNextTimestamp);
         if (!this.option.cache && adjustIndex > 0) {
           this.option.onFreeMemory({
             total: this.pcmLength,
@@ -248,7 +253,7 @@ export default class Dida {
           this.audiobuffers.splice(0, adjustIndex);
           this.timestamps.splice(0, adjustIndex);
         }
-        this.play(adjustNextTimestamp);
+        this.play(this.adjustNextTimestamp);
       } else {
         this.stop(index, timestamp);
       }
