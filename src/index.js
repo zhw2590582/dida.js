@@ -56,7 +56,6 @@ export default class Dida {
     this.timestamps = [];
     this.audiobuffers = [];
     this.timestampTmp = [];
-    this.adjustNextTimestamp = 0;
     this.decodeErrorBuffer = new Uint8Array();
     this.decodeWaitingBuffer = new Uint8Array();
 
@@ -136,10 +135,6 @@ export default class Dida {
       result += item.duration;
       return result;
     }, 0);
-  }
-
-  get currentTime() {
-    return this.adjustNextTimestamp;
   }
 
   destroy() {
@@ -239,8 +234,8 @@ export default class Dida {
       const nextTimestamp = this.timestamps[index + 1];
       const nextAudiobuffer = this.audiobuffers[index + 1];
       if (nextTimestamp !== undefined && nextAudiobuffer !== undefined) {
-        this.adjustNextTimestamp = this.option.onNext(nextTimestamp);
-        const adjustIndex = this.findIndex(this.adjustNextTimestamp);
+        const adjustNextTimestamp = this.option.onNext(nextTimestamp);
+        const adjustIndex = this.findIndex(adjustNextTimestamp);
         if (!this.option.cache && adjustIndex > 0) {
           this.option.onFreeMemory({
             total: this.pcmLength,
@@ -253,7 +248,7 @@ export default class Dida {
           this.audiobuffers.splice(0, adjustIndex);
           this.timestamps.splice(0, adjustIndex);
         }
-        this.play(this.adjustNextTimestamp);
+        this.play(adjustNextTimestamp);
       } else {
         this.stop(index, timestamp);
       }
